@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""Script to train a single-layer perceptron network to learn the AND function"""
+"""Script to train a single-layer perceptron network to learn the XOR function"""
 
 
 class Neuron(object):
@@ -78,7 +78,7 @@ class NeuralNetwork(object):
         self.l1op = list()
         self.lr = 1
         ini_w = list()
-        ini_w.append([0, 0, 0])
+        ini_w.append([1, 0, 0])
         self.build_net(ini_w)
 
     def set_input(self, i, t):
@@ -89,6 +89,9 @@ class NeuralNetwork(object):
         for n in self.layer1:
             cu_wt.append(n.get_weight())
         self.build_net(cu_wt)
+
+    def get_output(self):
+        return self.out[0]
 
     def get_weight(self):
         """Prints the weight of the neural network"""
@@ -103,7 +106,7 @@ class NeuralNetwork(object):
         self.l1_num = 1
         self.layer1 = list()
         for i in range(self.l1_num):
-            n1 = Neuron(self.inp_list, wts[i], 0.2)
+            n1 = Neuron(self.inp_list, wts[i], 0.4)
             self.layer1.append(n1)
 
     def forward_prop(self):
@@ -155,43 +158,45 @@ def train_net(nn):
     dataset.append(is2)
     dataset.append(is3)
     dataset.append(is4)
-    t1 = [1]
-    t2 = [-1]
-    t3 = [-1]
+    t1 = [-1]
+    t2 = [1]
+    t3 = [1]
     t4 = [-1]
     targets = list()
     targets.append(t1)
     targets.append(t2)
     targets.append(t3)
     targets.append(t4)
-    nb_epochs = 25
+    nb_epochs = 50
     cur_epoch = 0
     ini_wt = None
     fin_wt = nn.get_weight()
     while cur_epoch < nb_epochs:
         print("Currently in epoch number: ", cur_epoch + 1)
+        c = 0
         for i, t in zip(dataset, targets):
             #print(len(i), len(t))
             #print(i, t)
             nn.set_input(i, t)
             nn.learn()
             nn.display()
+            if t == nn.get_output(): c += 1
         ini_wt = fin_wt
         fin_wt = nn.get_weight()
-        if fin_wt == ini_wt:
-            print("Weights no longer updating after epoch number ", cur_epoch + 1, "!!  Training of the AND function is"
+        if fin_wt == ini_wt and c == 4:
+            print("Weights no longer updating after epoch number ", cur_epoch + 1, "!!  Training of the XOR function is"
                                                                                    + " complete!!!!")
             break
         cur_epoch += 1
     if cur_epoch == nb_epochs:
         print("Training period has elapsed")
         if fin_wt is not ini_wt:
-            print("Training has failed to learn the AND function!")
+            print("Training has failed to learn the XOR function after",  nb_epochs, "epochs!")
 
 
 def main():
     """The main method"""
-    print("Building an AND gate using Perceptron Neural Network that is trained")
+    print("Building an XOR gate using Perceptron Neural Network that is trained")
     print("Using Perceptron function as the activation function")
     nn = NeuralNetwork()
     ini_wt = nn.get_weight()
