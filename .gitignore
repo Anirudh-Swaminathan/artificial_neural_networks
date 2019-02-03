@@ -213,3 +213,6 @@ ann_env/
 
 # PNG images of outputs
 *.png
+
+# The idea folder of PyCharm
+.idea/
