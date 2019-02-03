@@ -210,3 +210,6 @@ tags
 
 # Virtual env
 ann_env/
+
+# PNG images of outputs
+*.png
