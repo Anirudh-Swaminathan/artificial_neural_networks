@@ -16,7 +16,7 @@ class Boltzmann(object):
         self.N = 3
         self.dists = None
         self.Umat = None
-        self.epochs = 50
+        self.epochs = 150
         print("NET initialized with the following values: ")
         print("p: ", self.p, "b: ", self.b, "T: ", self.T)
         print("Running for ", self.epochs, " epochs!")
@@ -67,6 +67,8 @@ class Boltzmann(object):
                 R = uniform(0, 1)
                 if R < AofT:
                     self.Umat[I][J] = 1 - self.Umat[I][J]
+            # Anneal the parameter
+            self.T = 0.95 * self.T
             print("Epoch Number: ", e)
             for row in self.Umat:
                 print(row)
